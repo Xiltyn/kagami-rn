@@ -12,13 +12,15 @@ import getEnvVars, { Environment } from '../../../utils/Environments';
 import { RootState } from '../../../modules';
 
 export namespace DevIndicator {
+    export interface Props {
+        auth?: RootState.AuthState;
+    }
     export interface State {
         showInfo: boolean;
-        auth?: RootState.AuthState;
     }
 }
 
-export class DevIndicator extends React.Component<{}, DevIndicator.State> {
+export class DevIndicator extends React.Component<DevIndicator.Props, DevIndicator.State> {
     protected _ENV = getEnvVars();
 
     public state: DevIndicator.State = {
@@ -70,7 +72,7 @@ export class DevIndicator extends React.Component<{}, DevIndicator.State> {
                                 Current User: { auth && auth.user && auth.user.name || 'Guest' }
                             </MonoText>
                             <MonoText>
-                                Status: { auth && auth.status.type || 'Unknown' }
+                                Status: { auth && auth.status && auth.status.type || 'Unknown' }
                             </MonoText>
                         </InfoSection>
                     </InfoContainer>
