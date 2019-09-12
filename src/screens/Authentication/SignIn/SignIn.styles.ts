@@ -1,10 +1,7 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
+import global, { HeroHeader } from '../../../shared/styles/global.styles';
 
-export const styles= StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: 80,
-        padding: 24,
-    },
-});
+export const SignInHeader = styled(HeroHeader)`
+    color: ${global.colours.light};
+    padding: 0 ${global.layout.spacing.narrow};
+`;;

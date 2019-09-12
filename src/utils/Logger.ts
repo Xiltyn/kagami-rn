@@ -19,13 +19,12 @@ export namespace Logger {
     }
 
     export const styles = {
-        INFO: 'color: ' + COLOR.BACKGROUND + '; font-weight: 100; background-color: ' + COLOR.INFO,
-        ERROR: 'color: ' + COLOR.ERROR + '; font-weight: 600; background-color: ' + COLOR.BACKGROUND,
-        SUCCESS: 'color: ' + COLOR.SUCCESS + '; font-weight: 600; background-color: ' + COLOR.BACKGROUND,
-        PROCESS: 'color: ' + COLOR.BACKGROUND + '; font-weight: 300; background-color: ' + COLOR.PROCESS,
-        WARN: 'color: ' + COLOR.WARN + '; font-weight: 300; background-color: ' + COLOR.BACKGROUND,
-        IMPORTANT: 'color: ' + COLOR.IMPORTANT
-                   + '; font-weight: 800; letter-spacing: .1rem; background-color: '+ COLOR.BACKGROUND,
+        INFO: `color: ${COLOR.BACKGROUND}; font-weight: 300; background-color: ${COLOR.INFO}`,
+        ERROR: `color: ${COLOR.ERROR}; font-weight: 600; background-color: ${COLOR.BACKGROUND}`,
+        SUCCESS: `color: ${COLOR.BACKGROUND}; font-weight: 600; background-color: ${COLOR.SUCCESS}`,
+        PROCESS: `color: ${COLOR.BACKGROUND}; font-weight: 300; background-color: ${COLOR.PROCESS}`,
+        WARN: `color: ${COLOR.BACKGROUND}; font-weight: 300; background-color: ${COLOR.WARN}`,
+        IMPORTANT: `color: ${COLOR.IMPORTANT} font-weight: 800; letter-spacing: .1rem; background-color:${COLOR.BACKGROUND}`,
     };
 
     export const log = (message:string, payload:any|any[], style?:STYLE) => {
@@ -33,6 +32,7 @@ export namespace Logger {
             const logMessage = `%c===> ${message}`;
             const logPayload = payload && payload;
             const logStyle = `${style ? styles[ style ] : ''}`;
+
             return console.log(logMessage, logStyle, logPayload);
         }
     };

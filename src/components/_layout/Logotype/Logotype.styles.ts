@@ -3,7 +3,8 @@ import global from '../../../shared/styles/global.styles';
 
 export enum logoTypes {
     BIG = '288px',
-    SMALL = '160px',
+    AUTO = '100%',
+    SMALL = '120px',
     MEDIUM = '240px',
 }
 

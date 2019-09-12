@@ -1,5 +1,11 @@
 import styled from 'styled-components/native';
-import global, { MessageText } from '../../shared/styles/global.styles';
+import global, { TextRegular } from '../../shared/styles/global.styles';
+
+export const MapWrapper = styled.View`
+    position: relative;
+    width: 100%;
+    height: 100%;
+`;
 
 export const StatusWrapper = styled.View`
     position: absolute;
@@ -12,7 +18,7 @@ export const StatusWrapper = styled.View`
     justify-content: space-around;
 `;
 
-export const Status = styled(MessageText)`
+export const Status = styled(TextRegular)`
     padding: ${global.layout.spacing.normal};
     color: ${global.colours.dark};
     background: ${global.colours.light};

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Image, logoTypes, LogoWrapper } from './Logotype.styles';
-import { ImageBackground, ImageSourcePropType } from 'react-native';
+import { ImageSourcePropType } from 'react-native';
 
 export namespace Logotype {
     export interface Props {

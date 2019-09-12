@@ -1,10 +1,10 @@
 import { applyMiddleware, Store, createStore, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { rootReducer, RootState } from '../modules/';
+import { rootReducer, RootState } from '../modules';
 import { AuthSaga } from '../modules/Authentication/sagas';
 import { MapSaga } from '../modules/Map/sagas';
 
-export function configureStore(initialState?:RootState):Store<RootState> {
+export function configureStore(initialState?: RootState): Store<RootState> {
     //@ts-ignore
     const _WINDOW = window as any;
     const sagaMiddleware = createSagaMiddleware();
@@ -15,8 +15,9 @@ export function configureStore(initialState?:RootState):Store<RootState> {
         initialState as any,
         composeEnhancers(applyMiddleware(...middleware))) as Store<RootState>;
 
-    sagaMiddleware.run(AuthSaga.AuthSagas);
-    sagaMiddleware.run(MapSaga.MapSagas);
+    // Initialise Sagas for the project
+    sagaMiddleware.run(AuthSaga.init);
+    sagaMiddleware.run(MapSaga.init);
 
     return store;
 }

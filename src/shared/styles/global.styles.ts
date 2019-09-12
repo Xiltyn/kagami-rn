@@ -5,6 +5,7 @@ enum fonts {
     medium = 'Raleway_Medium',
     bold = 'Raleway_Bold',
     black = 'Raleway_Black',
+    mono = 'ShareTechMono',
 }
 
 enum colours {
@@ -25,42 +26,6 @@ enum colours {
     success = '#4bf28e',
 }
 
-const typography = {
-    caption: `
-        font-size: 32px;
-        line-height: 42px;
-        letter-spacing: 1.4px;
-        text-transform: uppercase
-        font-family: ${fonts.black};
-    `,
-    screenTitle: `
-        font-size: 21px;
-        line-height: 24px;
-        color: ${colours.light};
-        font-family: ${fonts.regular}
-    `,
-    message: `
-        font-size: 14px;
-        line-height: 20px;
-        font-family: ${fonts.bold}
-    `,
-    button: `
-        font-size: 18px;
-        line-height: 22px;
-        font-family: ${fonts.bold}
-    `,
-    input: `
-        font-size: 18px;
-        line-height: 22px;
-        font-family: ${fonts.regular}
-    `,
-    smallText: `
-        font-size: 14px;
-        line-height: 18px;
-        font-family: ${fonts.regular}
-    `,
-};
-
 const layout = {
     spacing: {
         narrow: '8px',
@@ -78,7 +43,7 @@ const layout = {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-around
+            justify-content: flex-start;
         `,
         block: 'display: block; margin: auto',
     },
@@ -96,11 +61,10 @@ export default {
 // ============= Components ==============
 // ============== Defaults ===============
 
-export const ScreenWrapper = styled.View`
+export const ScreenLayout = styled.ScrollView`
     width: 100%;
     height: 100%;
     padding: ${layout.spacing.normal};
-    ${layout.display.flex_vertical};
 `;
 
 // ============= Typography ==============
@@ -110,32 +74,58 @@ export const HeroHeader = styled.Text`
     height: auto;
     text-align: center;
     flex-wrap: wrap;
-    ${typography.caption};
+    font-size: 40px;
+    line-height: 40px;
+    letter-spacing: 1.4px;
+    color: ${colours.primary_light};
+    text-transform: uppercase;
+    font-family: ${fonts.black};
 `;
 
 export const ScreenTitle = styled.Text`
     text-align: center;
-    ${typography.screenTitle};
+    font-size: 28px;
+    line-height: 28px;
+    color: ${colours.light};
+    font-family: ${fonts.medium}
 `;
 
-export const MessageText = styled.Text`
-    text-align: center;
-    ${typography.message};
+export const TextRegular = styled.Text`
+    font-size: 14px;
+    line-height: 20px;
+    font-family: ${fonts.bold};
+    color: ${colours.light};
+`;
+
+export const MonoText = styled.Text`
+    font-family: ${fonts.mono};
+    font-size: 14px;
+    line-height: 18px;
+    color: ${colours.dark};
 `;
 
 export const ButtonCaption = styled.Text`
     width: 100%;
     text-align: center;
-    ${typography.button};
+    font-size: 18px;
+    line-height: 22px;
+    font-family: ${fonts.bold};
 `;
 
 export const InputText = styled.TextInput`
     text-align: left;
-    ${typography.input};
+    font-size: 18px;
+    line-height: 22px;
+    font-family: ${fonts.regular};
 `;
 
-export const SmallText = styled.Text`
-    ${typography.smallText};
+export const AnchorText = styled.Text`
+    padding-bottom: ${ layout.spacing.narrow };
+    font-size: 14px;
+    line-height: 18px;
+    font-family: ${fonts.regular};
+    color: ${colours.secondary};
+    text-decoration: underline;
 `;
 
 export const FormWrapper = styled.View`

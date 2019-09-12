@@ -12,11 +12,15 @@ import { connect } from '../../shared/types/ReduxConnect';
 import { StorageManager } from '../../utils/StorageManager';
 import { createAppNavigation } from '../../navigation/AppNavigator';
 import { AuthenticationActions } from '../../modules/Authentication/actions';
+import { Header } from '../../components/_layout/Header/Header';
+import { HeaderProps } from 'react-navigation';
+import { DevIndicator } from '../../components/_layout/DevIndicator/DevIndicator';
 
 export namespace App {
     export interface Props {
         skipLoadingScreen?:boolean;
         isSignedIn?:boolean|null;
+        auth?: RootState.AuthState;
         actions?: Actions;
     }
 
@@ -28,10 +32,16 @@ export namespace App {
     export type Actions = {
         isLoggedIn:(payload?: {token: string}) => void;
     };
+
+    export type NavigationOptions = {
+        headerTitle?: React.ReactNode;
+        header?: (props: HeaderProps) => React.ReactNode;
+    };
 }
 
 @connect(
-    (state:RootState):Pick<App.Props, 'isSignedIn'> => ({
+    (state:RootState):Pick<App.Props, 'isSignedIn'|'auth'> => ({
+        auth: state.auth,
         isSignedIn: !!state.auth.token,
     }),
     (dispatch:Dispatch):Pick<App.Props, 'actions'> => ({
@@ -42,6 +52,10 @@ export namespace App {
 )
 
 export class App extends React.Component<App.Props, App.State> {
+    public static navigationOptions: App.NavigationOptions = {
+        headerTitle: <Header />,
+    };
+
     public state:App.State = {
         isLoadingComplete: false,
         devShowMore: __DEV__ ? false : undefined,
@@ -114,6 +128,7 @@ export class App extends React.Component<App.Props, App.State> {
                 'Raleway_Medium': require('../../../assets/fonts/Raleway/Raleway-Medium.ttf'),
                 'Raleway_Bold': require('../../../assets/fonts/Raleway/Raleway-Bold.ttf'),
                 'Raleway_Black': require('../../../assets/fonts/Raleway/Raleway-Black.ttf'),
+                'ShareTechMono': require('../../../assets/fonts/ShareTechMono/ShareTechMono-Regular.ttf'),
             });
 
             Logger.log(
@@ -185,7 +200,7 @@ export class App extends React.Component<App.Props, App.State> {
         );
     };
     protected _renderAuthenticatedView = ():React.ReactNode => {
-        const { isSignedIn } = this.props;
+        const { isSignedIn, auth } = this.props;
         const AppNavigator = createAppNavigation(isSignedIn as boolean|undefined);
 
         Logger.log(
@@ -197,6 +212,7 @@ export class App extends React.Component<App.Props, App.State> {
         return (
             <View style={ styles.container }>
                 { Platform.OS === 'ios' && <StatusBar barStyle='default'/> }
+                { __DEV__ && <DevIndicator auth={ auth }/> }
                 <AppNavigator/>
             </View>
         );
@@ -206,7 +222,10 @@ export class App extends React.Component<App.Props, App.State> {
     };
 
     public render() {
-        if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+        const { skipLoadingScreen } = this.props;
+        const { isLoadingComplete } = this.state;
+
+        if (!isLoadingComplete && !skipLoadingScreen) {
             return (
                 <AppLoading
                     startAsync={ async () => await this._initAppAsync() }

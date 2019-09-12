@@ -36,6 +36,26 @@ export const AuthenticationReducer = handleActions<RootState.AuthState, Auth>(
             user: action.payload ? action.payload.user : null,
             token: action.payload ? action.payload.token : null,
         }),
+        [ AuthenticationActions.Type.LOGOUT ]: state => ({
+            ...state,
+            status: {
+                type: requestStatusType.LOADING,
+                ...state.status,
+            },
+        }),
+        [ AuthenticationActions.Type.LOGOUT_FAILURE ]: (state, action) => ({
+            ...state,
+            status: action.payload ? action.payload.status : undefined,
+        }),
+        [ AuthenticationActions.Type.LOGOUT_SUCCESS ]: (state, action) => ({
+            ...state,
+            status: {
+                type: requestStatusType.SUCCESS,
+                ...state.status,
+            },
+            user: action.payload ? action.payload.user : null,
+            token: action.payload ? action.payload.token : null,
+        }),
         [ AuthenticationActions.Type.REGISTER ]: state => ({
             ...state,
             status: {

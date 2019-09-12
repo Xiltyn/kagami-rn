@@ -91,7 +91,7 @@ export class MapSaga {
         yield takeEvery(MapActions.Type.INIT_MAP, MapSaga.initMap);
     }
 
-    public static *MapSagas() {
+    public static *init() {
         yield all([
             fork(MapSaga.watchMap),
         ]);

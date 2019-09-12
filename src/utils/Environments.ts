@@ -1,13 +1,13 @@
 import Constants from 'expo-constants';
 
-namespace Environment {
+export namespace Environment {
     enum Env {
         DEV = 'dev',
         STAGE = 'stage',
         PROD = 'prod',
     }
 
-    enum Variables {
+    export enum Variables {
         API_URL = 'API_URL',
         API_KEY = 'API_KEY',
         ENV = 'ENV',

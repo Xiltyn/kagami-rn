@@ -14,7 +14,7 @@ export const AddButtonWrapper = styled.TouchableOpacity`
     align-items: center;
     justify-content: space-around;
 
-    background: ${global.colours.light};
+    background: ${global.colours.secondary};
     border-radius: 32px;
-    border: 1px solid ${global.colours.black};
+    border: 1px solid ${global.colours.secondary_dark};
 `;

@@ -1,27 +1,30 @@
-import { StyleSheet } from 'react-native';
+import global from '../../shared/styles/global.styles';
+import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
-    container: {
-        height: '100%',
-        width: '100%',
-        backgroundColor: '#fff',
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    loaderMessage: {
-        position: 'absolute',
-        bottom: '35%',
-        color: 'blue',
-        height: 32,
-        width: '100%',
-        fontSize: 24,
-        //fontFamily: 'lato-regular',
-        textAlign: 'center',
-    },
-    loaderSpinner: {
-        width: 72,
-        height: 72,
-    },
-});
+export const LoaderContainer = styled.View`
+    height: 100%;
+    width: 100%;
+    padding-top: 60%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: ${global.colours.dark};
+`;
+
+export const LoaderMessage = styled.Text`
+    height: 32px;
+    width: 100%;
+    margin-top: ${global.layout.spacing.normal}
+
+    font-size: 24px;
+    font-family: ${global.fonts.medium};
+    color: ${global.colours.primary_light};
+    text-align: center;
+`;
+
+export const LoaderSpinner = styled.ActivityIndicator`
+    width: 72px;
+    height: 72px;
+`;

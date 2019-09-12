@@ -1,23 +1,22 @@
 import { createStackNavigator } from 'react-navigation';
-
-import { SignIn } from '../screens/Authentication/SignIn/SignIn';
-import { SignUp } from '../screens/Authentication/SignUp/SignUp';
+import { AuthenticationContainer } from '../containers/AuthenticationContainer/AuthenticationContainer';
 
 export const AuthNavigator = createStackNavigator({
-    SignIn: {
-        screen: SignIn,
-        path: 'auth/signin',
-    },
-    SignUp: {
-        screen: SignUp,
-        path: 'auth/signup/:step',
+    Auth: {
+        screen: AuthenticationContainer,
+        path: 'auth/:view/:step',
         params: {
+            view: undefined,
             step: undefined,
         },
     },
 },
     {
-        initialRouteName: 'SignIn',
+        initialRouteName: 'Auth',
+        initialRouteParams: {
+            view: 'login',
+            step: undefined,
+        },
         headerMode: 'none',
     },
 );

@@ -1,31 +1,37 @@
 import * as React from 'react';
-import { ActivityIndicator, View, Text } from 'react-native';
-import { styles } from './ContentLoader.styles';
+import { LoaderContainer, LoaderMessage, LoaderSpinner } from './ContentLoader.styles';
 import { Color } from 'csstype';
+import global from '../../shared/styles/global.styles';
 
 export namespace ContentLoader {
     export interface Props {
-        message?:string;
-        size:number;
-        color:Color;
+        message?: string;
+        size: number;
+        color: Color;
     }
 }
 
 export class ContentLoader extends React.Component<ContentLoader.Props> {
+    public static defaultProps: Partial<ContentLoader.Props> = {
+        size: 80,
+        color: global.colours.primary_light,
+    };
 
     public render():React.ReactNode {
         const { message, size, color } = this.props;
 
         return (
-            <View style={ styles.container }>
-                <ActivityIndicator
-                    style={ styles.loaderSpinner }
+            <LoaderContainer>
+                <LoaderSpinner
                     size={ size }
                     color={ color } />
                 {
-                    message && <Text style={ styles.loaderMessage }>{ message }</Text>
+                    message &&
+                        <LoaderMessage>
+                            { message }
+                        </LoaderMessage>
                 }
-            </View>
+            </LoaderContainer>
         );
     }
 }

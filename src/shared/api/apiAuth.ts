@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API } from './api.config';
-import getEnvVars from '../../utils/Environment';
+import getEnvVars from '../../utils/Environments';
 
 const ENV = getEnvVars();
 

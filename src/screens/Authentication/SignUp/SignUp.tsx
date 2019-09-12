@@ -1,57 +1,28 @@
-// Dependencies
 import React from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import { FormState } from 'redux-form';
-import { bindActionCreators, Dispatch } from 'redux';
-import { NavigationTransitionProps } from 'react-navigation';
-// Shared
+import { FormStateMap } from 'redux-form';
+import { NavigationScreenProps } from 'react-navigation';
 import copy, { LocaleCode } from '../../../shared/copy';
-import { connect } from '../../../shared/types/ReduxConnect';
-// Models
-import { RootState } from '../../../modules';
-import { AuthSagaArgs } from '../../../models/Authentication';
 import { SignUpForm } from '../../../components/SignUpForm/SignUpForm';
-// UI
 import { Layout, Universal, Functional } from '../../../components/';
-// Styles
 import { ButtonContainer, SignUpHeader, SignUpWrapper } from './SignUp.styles';
 import global from '../../../shared/styles/global.styles';
-import { AuthSaga } from '../../../modules/Authentication/sagas';
-import { Action } from 'redux-actions';
+import { AuthenticationContainer } from '../../../containers/AuthenticationContainer/AuthenticationContainer';
 
 export namespace SignUp {
-    export interface Props {
-        formValues?: FormState;
-        actions?: SignUpActions;
+    export interface Props extends Pick<NavigationScreenProps, 'navigation'> {
+        forms?: FormStateMap;
+        actions?: AuthenticationContainer.authenticationActions;
     }
-
-    export interface NavigationOptions {
-        header: boolean|null;
-        headerTransparent: boolean|null;
-    }
-
-    export type SignUpActions = {
-        register: (action: Action<AuthSagaArgs>) => void;
-    };
 }
-@connect(
-    (state: RootState): Pick<SignUp.Props, 'formValues'> => ({
-        formValues: state.form.sign_up_form,
-    }),
-    (dispatch: Dispatch): Pick<SignUp.Props, 'actions'> => ({
-        actions: bindActionCreators({
-            register: (action) =>
-                AuthSaga.dispatchRegister(action),
-        }, dispatch),
-    }),
-)
-export class SignUp extends React.Component<SignUp.Props&NavigationTransitionProps> {
+
+export class SignUp extends React.Component<SignUp.Props> {
     protected _steps = Object.freeze({
         mailForm: 'RegisterWithMail',
     });
 
     public render() {
-        const { navigation: { navigate, state: { params } }, formValues, actions } = this.props;
+        const { navigation: { navigate, state: { params } }, forms, actions } = this.props;
         const { mailForm } = this._steps;
 
         return (
@@ -80,16 +51,18 @@ export class SignUp extends React.Component<SignUp.Props&NavigationTransitionPro
                                         } }
                                         onPress={ () =>
                                             navigate({
-                                                routeName: 'SignUp',
+                                                routeName: 'Auth',
                                                 params: {
+                                                    view: 'register',
                                                     step: mailForm,
                                                 },
                                             })
                                         }
                                         onLongPress={ () =>
                                             navigate({
-                                                routeName: 'SignUp',
+                                                routeName: 'Auth',
                                                 params: {
+                                                    view: 'register',
                                                     step: mailForm,
                                                 },
                                             })
@@ -99,7 +72,11 @@ export class SignUp extends React.Component<SignUp.Props&NavigationTransitionPro
                                 <Functional.SignUpForm
                                     navigate={ navigate }
                                     dispatchSignUp={ actions && actions.register }
-                                    formValues={ formValues && formValues.values as SignUpForm.formValues }/>
+                                    formValues={
+                                        forms &&
+                                            forms.sign_up_form &&
+                                                forms.sign_up_form.values as SignUpForm.formValues }
+                                />
                         }
                     </SignUpWrapper>
                     <View>
@@ -109,8 +86,20 @@ export class SignUp extends React.Component<SignUp.Props&NavigationTransitionPro
                                 background: global.colours.dark,
                                 label: copy.auth[ LocaleCode.EN ].signup_btn_go_to_login,
                             } }
-                            onPress={() => navigate('SignIn')}
-                            onLongPress={() => navigate('SignIn')}
+                            onPress={() => navigate({
+                                routeName: 'Auth',
+                                params: {
+                                    view: 'login',
+                                    step: undefined,
+                                },
+                            })}
+                            onLongPress={() => navigate({
+                                routeName: 'Auth',
+                                params: {
+                                    view: 'login',
+                                    step: undefined,
+                                },
+                            })}
                         />
                     </View>
                 </Layout.AppBg>

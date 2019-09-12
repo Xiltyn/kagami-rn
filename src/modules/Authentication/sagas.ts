@@ -7,6 +7,7 @@ import { Action } from 'redux-actions';
 import { Logger } from '../../utils/Logger';
 import { MockApi } from '../../utils/MockRequest';
 import { StorageManager } from '../../utils/StorageManager';
+import RequestStatus, { requestStatusType } from '../../shared/types/RequestStatus';
 
 export class AuthSaga {
     private static mockApi = new MockApi();
@@ -44,7 +45,7 @@ export class AuthSaga {
         if(debug) Logger.log(
             'Auth Saga: Dispatching login action',
             { action },
-            Logger.STYLE.PROCESS
+            Logger.STYLE.PROCESS,
         );
 
         try {
@@ -91,13 +92,15 @@ export class AuthSaga {
 
     protected static *loginFailure(err: string) {
         yield put(AuthenticationActions.loginFailure({
-            statusMessage: err,
+            status: {
+                type: requestStatusType.ERROR,
+                message: err,
+            },
         }));
     }
 
     public static *dispatchRegister(action: Action<AuthSagaArgs>) {
         try {
-            yield put({ type: AuthenticationActions.Type.LOGIN });
             const _RES = yield call(apiAuth.signIn, action.payload.email, action.payload.password);
 
             if(_RES.error) {
@@ -123,8 +126,53 @@ export class AuthSaga {
 
     protected static *registerFailure(err: string) {
         yield put(AuthenticationActions.registerFailure({
-            statusMessage: err,
+            status: {
+                type: requestStatusType.ERROR,
+                message: err,
+            },
         }));
+    }
+
+    protected static *dispatchLogout() {
+        try {
+            const _RES = yield call(AuthSaga.mockApi.request,{
+                token: null,
+                user: null,
+            }, {});
+
+            if(_RES.error) {
+                yield AuthSaga.logoutFailure(_RES.error);
+            } else {
+                yield call(StorageManager.clear);
+                yield AuthSaga.logoutSuccess(_RES.data);
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                yield AuthSaga.logoutFailure(err.stack!);
+            } else {
+                yield AuthSaga.logoutFailure('An unknown error occured.');
+            }
+        }
+    }
+
+    protected static *logoutSuccess(data: any) {
+        yield put(AuthenticationActions.logoutSuccess({
+            token: data.token,
+            user: data.user,
+        }));
+    }
+
+    protected static *logoutFailure(err: string) {
+        yield put(AuthenticationActions.logoutFailure({
+            status: {
+                type: requestStatusType.ERROR,
+                message: err,
+            },
+        }));
+    }
+
+    protected static *watchLogout() {
+        yield takeEvery(AuthenticationActions.Type.LOGOUT, AuthSaga.dispatchLogout);
     }
 
     protected static *watchLogin() {
@@ -139,9 +187,10 @@ export class AuthSaga {
         yield takeEvery(AuthenticationActions.Type.IS_LOGGED_IN, AuthSaga.isLoggedIn);
     }
 
-    public static *AuthSagas() {
+    public static *init() {
         yield all([
             fork(AuthSaga.watchLogin),
+            fork(AuthSaga.watchLogout),
             fork(AuthSaga.watchRegister),
             fork(AuthSaga.watchIsLoggedIn),
         ]);
